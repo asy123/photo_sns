@@ -1,0 +1,49 @@
+{% extends "base.j2.html" %}
+{% block title%}  {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-8">
+    {% with post = data.post %} 
+    {% with current_user=current_user %}
+    {% include 'post_card.j2.html'  %}
+    {% endwith %}
+    {% endwith %}
+    <div class="modal" id="post-delete-modal-card">
+        <div class="modal-background" onclick="closeDeletePostModal();"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Delete this post</p>
+            <button class="delete" aria-label="close" onclick="closeDeletePostModal();"></button>
+          </header>
+          <section class="modal-card-body">
+            Wornign!<br>
+            Delete this post parmanently.
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button" onclick="closeDeletePostModal();">
+              Cancel
+            </button>
+              <form method="post">
+                  {{ form.csrf_token }}
+                  <div class="field">
+                    <button class="button is-danger">
+                        Delete
+                    </button>
+                  </div>
+              </form>
+          </footer>
+        </div>
+    </div>
+    <div class="box has-text-centered">
+        <div class="container">
+          <button class="button is-success" onclick="openDeletePostModal();">
+              Delete this post
+          </button>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

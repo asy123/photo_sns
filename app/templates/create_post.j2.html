@@ -1,0 +1,28 @@
+{% extends "base.j2.html" %}
+{% block title%}  {% endblock %}
+{% block head %}
+{{ super() }}
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+window.onload = ev => {
+  flatpickr(".flatpickr", {
+      "defaultDate": "{{data.post.shooting_at.strftime('%Y-%m-%d')}}",
+  });
+};
+</script>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-8">
+    {% with post = data.post %} 
+    {% include 'post_form.j2.html'  %}
+    {% endwith %}
+    </div>
+  </div>
+</div>
+{% endblock %}

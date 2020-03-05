@@ -1,0 +1,69 @@
+<div class="section">
+  <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    {% if pagenation.prev %}
+    <a class="pagination-previous" href="{{pagenation.prev.url}}">Previous</a>
+    {% endif %}
+    {% if pagenation.next %}
+    <a class="pagination-next" href="{{pagenation.next.url}}">Next page</a>
+    {% endif %}
+    <ul class="pagination-list">
+      {% if pagenation.first %}
+      <li style="list-style: none;">
+        <a
+          class="pagination-link"
+          aria-label="Goto page {{pagenation.first.index}}"
+          href="{{pagenation.first.url}}"
+          >{{pagenation.first.index}}</a
+        >
+      </li>
+      {% endif %}
+      {% if pagenation.current and pagenation.first and (pagenation.prev or pagenation.next)%}
+      <li style="list-style: none;"><span class="pagination-ellipsis">&hellip;</span></li>
+      {% endif %}
+      {% if pagenation.prev %}
+      <li style="list-style: none;">
+        <a
+          class="pagination-link"
+          aria-label="Goto page {{pagenation.prev.index}}"
+          href="{{pagenation.prev.url}}"
+          >{{pagenation.prev.index}}</a
+        >
+      </li>
+      {% endif %}
+      {% if pagenation.current and (pagenation.first or pagenation.last or pagenation.prev or pagenation.next)%}
+      <li style="list-style: none;">
+        <a
+          class="pagination-link is-current"
+          aria-label="Page {{pagenation.current.index}}"
+          aria-current="page"
+          href="{{pagenation.current.url}}"
+          >{{pagenation.current.index}}</a
+        >
+      </li>
+      {% endif %}
+      {% if pagenation.next %}
+      <li style="list-style: none;">
+        <a
+          class="pagination-link"
+          aria-label="Goto page {{pagenation.next.index}}"
+          href="{{pagenation.next.url}}"
+          >{{pagenation.next.index}}</a
+        >
+      </li>
+      {% endif %}
+      {% if pagenation.current and pagenation.last and (pagenation.prev or pagenation.next)%}
+      <li style="list-style: none;"><span class="pagination-ellipsis">&hellip;</span></li>
+      {% endif %}
+      {% if pagenation.last %}
+      <li style="list-style: none;">
+        <a
+          class="pagination-link"
+          aria-label="Goto page {{pagenation.last.index}}"
+          href="{{pagenation.last.url}}"
+          >{{pagenation.last.index}}</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>

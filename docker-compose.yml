@@ -1,0 +1,138 @@
+version: '3'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    # NOTE: For dev
+    # ports:
+    #   - '5672:5672'
+    #   - '15672:15672'
+    networks:
+      - back
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    # NOTE: For dev
+    # ports:
+    #   - 9000:9000
+    command: server /data
+    networks:
+      - back
+    volumes:
+      - ./data/minio:/data
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    # NOTE: For dev
+    # ports:
+    #   - '5432:5432'
+    environment:
+      POSTGRES_DB: web
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - back
+
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  # NOTE: For dev
+  # adminer:
+  #   container_name: adminer
+  #   image: adminer
+  #   ports:
+  #     - 9010:8080
+  #   depends_on: 
+  #     - postgres
+  #   networks:
+  #     - back
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    # TODO: Implement docker image for reverse proxy
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    ports:
+      - "12000:80"
+    depends_on:
+      - web
+      - minio
+    networks:
+      - front
+      - back
+
+  web:
+    container_name: web
+    build: .
+    # NOTE: For dev
+    # volumes:
+    #   - ./app:/opt/web/app:ro
+    #   - ./uwsgi.ini:/opt/web/uwsgi.ini:ro
+    # ports:
+    #   - "3031:3031"
+    command: uwsgi --ini uwsgi.ini
+    environment:
+      MINIO_HOST: minio
+      MINIO_PORT: 9000
+      MINIO_ACESS_KEY: ${MINIO_ACESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE_NAME: web
+    depends_on: 
+      - rabbitmq
+      - postgres
+      - minio
+    networks:
+      - back
+
+  image_converter:
+    container_name: image_converter
+    build: .
+    # NOTE: For dev
+    # volumes:
+    #   - ./app:/app:ro
+    environment:
+      MINIO_HOST: minio
+      MINIO_PORT: 9000
+      MINIO_ACESS_KEY: ${MINIO_ACESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE_NAME: web
+    command: python3 -m app.worker.image_converter
+    depends_on:
+      - rabbitmq
+      - postgres
+      - minio
+    networks:
+      - back
+
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge
+  

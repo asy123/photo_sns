@@ -1,0 +1,14 @@
+<div class="card">
+    <div class="card-media">
+        <figure class="image is-128x128">
+            <img src="{{ user.icon.small_icon_image_src }}" alt="" />
+        </figure>
+    </div>
+    <div class="card-content">
+        <p class="title is-5">{{user.display_name}}</p>
+        <p class="subtitle is-6">@{{user.username}}</p>
+    </div>
+    <div class="card-content">
+        {{user.description}}
+    </div>
+</div>

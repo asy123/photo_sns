@@ -1,0 +1,23 @@
+{% extends "base.j2.html" %}
+{% block title%} Recent Posts {% endblock %}
+{% block content %}
+{% with pagenation=data.pagenation %}
+{% include 'pagenation_navbar.j2.html' %}
+{% endwith %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-10">
+      {% for post in data.posts %}
+        {% with post = post %} 
+        {% with current_user=current_user %}
+        {% include 'post_card.j2.html'  %}
+        {% endwith %}
+        {% endwith %}
+    {% endfor %}
+    </div>
+  </div>
+</div>
+{% with pagenation=data.pagenation %}
+{% include 'pagenation_navbar.j2.html' %}
+{% endwith %}
+{% endblock %}

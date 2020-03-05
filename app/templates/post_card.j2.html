@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="modal" id="card-modal-{{ post.id }}">
+    <div class="modal-background" onclick="onClickModelBackGround(this);"></div>
+    <div class="modal-content" style="width:80%">
+        <figure class="image">
+          <img src="{{ post.image.original_image_src }}" alt=""/>
+        </figure>
+    </div>
+    <button class="modal-close is-large" aria-label="close" onclick="onClickModelBackGround(this);"></button>
+  </div>
+  <div class="card box">
+    <div class="card-content">
+      <a href="{{url_for('get_post', post_id=post.id)}}">
+        <div class="content">
+          <p class="title is-3">{{ post.title }}</p>
+        </div>
+      </a>
+    </div>
+    <div class="card-image">
+      <figure class="image" onclick="onClickCardImage(this);" id="card-image-{{ post.id }}">
+        <img src="{{ post.image.card_image_src }}" alt="Card Image" style="width: 940px; height: 720px; object-fit: contain;"/>
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="media level">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="{{ post.user.icon.middle_icon_image_src }}" alt="Icon image" />
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-5">{{post.user.display_name}}</p>
+          <p class="subtitle is-6">@{{post.user.username}}</p>
+        </div>
+        <div class="media-right">
+          <div class="dropdown is-right" onclick="onClickDropDown(this);">
+            <div class="dropdown-trigger">
+              <button
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+              >
+                <span class="icon is-small">
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a class="dropdown-item">
+                  Copy Link
+                </a>
+                <a class="dropdown-item" href="{{url_for('get_post', post_id=post.id)}}">
+                  Go to this post page
+                </a>
+                {% if current_user.is_authenticated and current_user.id ==
+                post.user.id %}
+                <a class="dropdown-item" href="{{url_for('update_post', post_id=post.id)}}">
+                  Modify
+                </a>
+                <a class="dropdown-item" href="{{url_for('delete_post', post_id=post.id)}}">
+                  Delete
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      {{post.description | cr }}
+      <br />
+      Shooting At:
+      <time datetime="{{post.shooting_at.strftime('%Y-%m-%d')}}"
+        >{{post.shooting_at.strftime('%Y-%m-%d')}}</time
+      >
+      <br />
+      Recent Updated At:
+      <time datetime="{{post.shooting_at.strftime('%Y-%m-%d')}}"
+        >{{post.updated_at.strftime('%Y-%m-%d %H:%M')}}</time
+      >
+    </div>
+  </div>
+</div>

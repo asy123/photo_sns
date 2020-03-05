@@ -1,0 +1,71 @@
+{% extends "base.j2.html" %}
+{% block title%} Sign Up {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-4">
+        <div class="box">
+            <figure class="image" id="image-preview">
+            <img src="{{ data.user.icon.large_icon_image_src }}" alt="" />
+            </figure>
+        </div>
+        <form method="post" class="box" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <div class="field">
+                <label class="label">{{ form.display_name.label }}</label>
+                <div class="control">
+                  <input name="display_name" class="input" type="text" placeholder="FooBar" {% if form.display_name.data %}value="{{form.display_name.data}}" {% else %} value="{{data.user.display_name}}" {% endif %}/>
+                </div>
+                {% if form.display_name.errors %}
+                {% for error in form.display_name.errors %}
+                  <p class="help is-danger">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="field">
+                <label class="label">{{ form.description.label }}</label>
+                <div class="control">
+                  <textarea
+                    name="description"
+                    class="textarea"
+                    placeholder="This photo is taken at 2020/01/20"
+                  >{% if form.description.data %}{{form.description.data}}{% else %}{{data.user.description}}{% endif %}</textarea>
+                {% if form.description.errors %}
+                {% for error in form.description.errors %}
+                    <p class="help is-danger">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="field section">
+                <div class="file has-name is-boxed is-centered">
+                  <label class="file-label">
+                    <input class="file-input" type="file" name="icon" onchange="onFileUpload(this.files)" />
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        {{ form.icon.label }}
+                      </span>
+                    </span>
+                    <span class="file-name">
+                      Screen Shot 2017-07-29 at 15.54.25.png
+                    </span>
+                  </label>
+                </div>
+                {% if form.icon.errors %}
+                {% for error in form.icon.errors %}
+                  <p class="help is-danger">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="field">
+              <button class="button is-success">
+                Update profile
+              </button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

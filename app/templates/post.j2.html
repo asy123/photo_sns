@@ -1,0 +1,15 @@
+{% extends "base.j2.html" %}
+{% block title%}  {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-8">
+    {% with post = data.post %} 
+    {% with current_user=current_user %}
+    {% include 'post_card.j2.html'  %}
+    {% endwith %}
+    {% endwith %}
+    </div>
+  </div>
+</div>
+{% endblock %}

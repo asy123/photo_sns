@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <script>
+      const onClickNavbarBurger = () => {
+        document
+          .getElementById("navbarBurgerButton")
+          .classList.toggle("is-active");
+        document.getElementById("navbarMenu").classList.toggle("is-active");
+      };
+      const onClickDropDown = elem => {
+        elem.classList.toggle("is-active");
+      };
+
+      const onClickCardImage = elem => {
+        document
+          .getElementById("card-modal-" + elem.id.split("-")[2])
+          .classList.add("is-active");
+      };
+
+      const onClickModelBackGround = elem => {
+        elem.parentElement.classList.remove("is-active");
+      };
+
+      const openDeletePostModal = () => {
+        document
+          .getElementById("post-delete-modal-card")
+          .classList.add("is-active");
+      };
+
+      const closeDeletePostModal = () => {
+        document
+          .getElementById("post-delete-modal-card")
+          .classList.remove("is-active");
+      };
+
+      const onFileUpload = files => {
+        const file = files[0];
+        const reader = new FileReader();
+
+        if (file.type.split("/")[0] !== "image") {
+          return;
+        }
+
+        reader.onload = event => {
+          const preview = document.getElementById("image-preview");
+          while (preview.firstChild) {
+            preview.removeChild(preview.firstChild);
+          }
+          const newImage = document.createElement("img");
+          newImage.setAttribute("src", event.target.result);
+          preview.appendChild(newImage);
+        };
+
+        reader.readAsDataURL(file);
+      };
+    </script>
+    {% block head %} {% endblock %}
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{{url_for('recent_posts')}}">
+          Photo Galary
+        </a>
+        <a
+          id="navbarBurgerButton"
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarMenu"
+          onclick="onClickNavbarBurger()"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="{{url_for('recent_posts')}}">
+            Recent Post
+          </a>
+        </div>
+
+        <div class="navbar-end">
+          {% if current_user.is_authenticated %}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <figure class="image is-32x32">
+                <img
+                  class="is-rounded"
+                  src="{{current_user.icon.small_icon_image_src}}"
+                />
+              </figure>
+            </a>
+            <div class="navbar-dropdown is-right">
+              <p>
+                Username: {{ current_user.username }}
+              </p>
+              <p>
+                Display name: {{ current_user.display_name }}
+              </p>
+              <a class="navbar-item" href="{{url_for('create_post')}}">
+                Create post
+              </a>
+              <a class="navbar-item" href="{{url_for('get_user', username=current_user.username)}}">
+                Post management
+              </a>
+              <a class="navbar-item" href="{{url_for('get_work_in_progress')}}">
+                  Work in porgress posts
+              </a>
+              <a class="navbar-item" href="{{url_for('update_profile')}}">
+                Edit Profile
+              </a>
+              <a class="navbar-item" href="{{url_for('logout')}}">
+                Logout
+              </a>
+            </div>
+          </div>
+          {% else %}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <figure class="image is-32x32">
+                <img
+                  class="is-rounded"
+                  src="https://bulma.io/images/placeholders/32x32.png"
+                />
+              </figure>
+            </a>
+            <div class="navbar-dropdown is-right">
+              <a class="navbar-item" href="{{url_for('login')}}">
+                Login
+              </a>
+              <a class="navbar-item" href="{{url_for('sing_up')}}">
+                Sign Up
+              </a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <div class="content">
+      {% block content %} {% endblock %}
+    </div>
+  </body>
+</html>

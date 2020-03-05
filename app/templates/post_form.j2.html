@@ -1,0 +1,89 @@
+<div class="box">
+  <div class="box">
+    <figure class="image" id="image-preview">
+        {% if post.image_src %}
+        <img src="{{ post.image_src }}" alt="" />
+        {% endif %}
+    </figure>
+  </div>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    <div class="field">
+      <label class="label">{{ form.title.label }}</label>
+      <div class="control">
+        <input
+          name="title"
+          class="input"
+          type="text"
+          placeholder="Beautigul yoshida ryo"
+          value="{{ post.title }}"
+        />
+      </div>
+      {% if form.title.errors %}
+      {% for error in form.title.errors %}
+        <p class="help is-danger">{{error}}</p>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="field">
+      <label class="label">{{ form.description.label }}</label>
+      <div class="control">
+        <textarea
+          name="description"
+          class="textarea"
+          placeholder="This photo is taken at 2020/01/20"
+        >{{ post.description }}</textarea>
+      </div>
+      {% if form.description.errors %}
+      {% for error in form.description.errors %}
+        <p class="help is-danger">{{error}}</p>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="field">
+      <label class="label">{{ form.shooting_at.label }}</label>
+      <div class="control">
+        <input
+          name="shooting_at"
+          class="flatpickr"
+          type="text"
+          readonly="readonly"
+          placeholder="20xx-12-31"
+        />
+      </div>
+      {% if form.shooting_at.errors %}
+      {% for error in form.shooting_at.errors %}
+        <p class="help is-danger">{{error}}</p>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="field">
+      <div class="file has-name is-boxed is-centered">
+        <label class="file-label">
+          <input class="file-input" type="file" name="image" onchange="onFileUpload(this.files)" id="image-upload-field"/>
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Choose a file…
+            </span>
+          </span>
+          <span class="file-name">
+            Screen Shot 2017-07-29 at 15.54.25.png
+          </span>
+        </label>
+      </div>
+      {% if form.image.errors %}
+      {% for error in form.image.errors %}
+        <p class="help is-danger">{{error}}</p>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="field">
+      <button class="button is-success">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

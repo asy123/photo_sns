@@ -1,0 +1,43 @@
+{% extends "base.j2.html" %}
+{% block title%} Login {% endblock %}
+{% block content %}
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-4">
+      {% if error.failedToAuth %}
+      <div class="section box has-text-danger has-text-centered">
+        Failed to authentification.
+        <br>
+        Username or password is invalid.
+      </div>
+      {% endif %}
+      <form method="post" class="box">
+        {{ form.csrf_token }}
+        <div class="field">
+          <label class="label">{{ form.username.label }}</label>
+          <div class="control">
+            <input name="username" class="input" type="text" placeholder="FooBar" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">{{ form.password.label }}</label>
+          <div class="control">
+            <input name=password class="input" type="password" placeholder="*******" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="" class="checkbox">
+            <input name="remenberMe" type="checkbox" />
+            {{ form.remember_me.label }}
+          </label>
+        </div>
+        <div class="field">
+          <button class="button is-success">
+            Sgin In
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
